@@ -70,19 +70,6 @@ class CartController extends Controller
         }
     }
 
-    // public function login(Request $request)
-    // {
-    //     $credentials = $request->only('username', 'password');
-    //     $user = User::where('username', $credentials['username'])->first();
-    //     if ($user && ($credentials['password'] == $user->password)) {
-    //         // Authentication passed
-    //         return response()->json(['message' => 'Logged in', 'data' => $user,]);
-    //     } else {
-    //         // Authentication failed
-    //         return response()->json(['message' => 'Invalid credentials'], 401);
-    //     }
-    // }
-
     /**
      * Display the specified resource.
      */

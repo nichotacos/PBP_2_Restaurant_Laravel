@@ -40,6 +40,7 @@ class UserController extends Controller
         try {
             $registrationData = $request->all();
             $validate = Validator::make($registrationData, [
+                'username' => 'unique:users',
                 'email' => 'unique:users',
                 'no_telp' => 'unique:users'
             ]);
@@ -112,7 +113,21 @@ class UserController extends Controller
 
             if(!$user) throw new \Exception('User tidak ditemukan!');
 
-            $user->update($request->all());
+            $registrationData = $request->all();
+            $validate = Validator::make($registrationData, [
+                'username' => 'unique:users',
+                'email' => 'unique:users',
+                'no_telp' => 'unique:users'
+            ]);
+
+            if($validate->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => $validate->errors(),
+                ], 400);
+            }
+
+            $user->update($registrationData);
 
             return response()->json([
                 'status' => true,
@@ -120,6 +135,54 @@ class UserController extends Controller
                 'data' => $user,
             ], 200);
         } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ], 400);
+        }
+    }
+
+    public function updateImage($id, Request $request) {
+        try {
+            $user = User::find($id);
+
+            if(!$user) throw new \Exception('User tidak ditemukan!');
+
+            $newImage = $request->only('image');
+
+            $user->update(['image' => $newImage]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil update foto user!',
+                'data' => $user,
+            ], 200);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ], 400);
+        }
+    }
+
+    public function changePassword($id) {
+        try {
+            $user = User::find($id);
+
+            if(!$user) throw new \Exception('User tidak ditemukan!');
+
+            $newPassword = $user['username'];
+
+            $user->update(['password' => $newPassword]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil update password user!',
+                'data' => $user,
+            ], 200);
+        } catch(\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),

@@ -17,3 +17,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('user', UserController::class);
 Route::post('/user/login', [UserController::class, 'login']);
+Route::put('user/forgotpw/{id}', [UserController::class, 'changePassword']);
+Route::put('user/updateimage/{id}', [UserController::class, 'updateImage']);

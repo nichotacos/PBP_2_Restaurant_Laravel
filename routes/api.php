@@ -27,3 +27,6 @@ Route::put('user/updateimage/{id}', [UserController::class, 'updateImage']);
 Route::get('cart/findAvail/{id}', [CartController::class, 'findAvail']);
 Route::get('cart/find/{id}', [CartController::class, 'find']);
 Route::apiResource('cart', CartController::class);
+
+Route::apiResource('cart', CartController::class);
+Route::apiResource('feedback', FeedbackController::class);

@@ -39,26 +39,27 @@ class CartController extends Controller
     public function store(Request $request)
     {
         try {
-            $registrationData = $request->all();
-            $validate = Validator::make($registrationData, [
-                'name' => 'required',
-                'quantity' => 'required',
-                'image' => 'required',
-                'desc' => 'required',
-                'price' => 'required',
-                'id_user' => 'required',
-            ]);
-            if ($validate->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => $validate->errors(),
-                ], 400);
-            }
-
             $cart = Cart::create($request->all());
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil Insert Data Cart!',
+                'data' => $cart,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ], 400);
+        }
+    }
+
+    public function findAvail($id) {
+        try {
+            $cart = Cart::all()->where('status', '==', 'On progress')->where('itemId', '==', $id)->last();
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil Ambil Data Cart!',
                 'data' => $cart,
             ], 200);
         } catch (\Exception $e) {
@@ -76,14 +77,14 @@ class CartController extends Controller
     // public function show($id)
     // {
     //     try {
-    //         $user = User::find($id);
+    //         $cart = Cart::find($id);
 
-    //         if (!$user) throw new \Exception('User tidak ditemukan!');
+    //         if (!$cart) throw new \Exception('Cart tidak ditemukan!');
 
     //         return response()->json([
     //             'status' => true,
-    //             'message' => 'Berhasil ambil data user!',
-    //             'data' => $user,
+    //             'message' => 'Berhasil ambil data cart!',
+    //             'data' => $cart,
     //         ], 200);
     //     } catch (\Exception $e) {
     //         return response()->json([
@@ -93,22 +94,17 @@ class CartController extends Controller
     //         ], 400);
     //     }
     // }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    
+    public function find($id)
     {
         try {
-            $cart = cart::find($id);
+            $cart = Cart::find($id);
 
             if (!$cart) throw new \Exception('Cart tidak ditemukan!');
 
-            $cart->update($request->all());
-
             return response()->json([
                 'status' => true,
-                'message' => 'Berhasil update data Cart!',
+                'message' => 'Berhasil ambil data cart!',
                 'data' => $cart,
             ], 200);
         } catch (\Exception $e) {
@@ -119,6 +115,33 @@ class CartController extends Controller
             ], 400);
         }
     }
+    
+
+    /**
+     * Update the specified resource in storage.
+     */
+    // public function update(Request $request, $id)
+    // {
+    //     try {
+    //         $cart = cart::find($id);
+
+    //         if (!$cart) throw new \Exception('Cart tidak ditemukan!');
+
+    //         $cart->update($request->all());
+
+    //         return response()->json([
+    //             'status' => true,
+    //             'message' => 'Berhasil update data Cart!',
+    //             'data' => $cart,
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => $e->getMessage(),
+    //             'data' => [],
+    //         ], 400);
+    //     }
+    // }
 
     /**
      * Remove the specified resource from storage.

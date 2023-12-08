@@ -72,10 +72,10 @@ class UserController extends Controller
         $user = User::where('username', $credentials['username'])->first();
         if ($user && ($credentials['password'] == $user->password)) {
             // Authentication passed
-            return response()->json(['message' => 'Logged in', 'data' => $user,]);
+            return response()->json(['message' => 'Logged in', 'data' => $user, 'status' => 200], 200);
         } else {
             // Authentication failed
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['message' => 'Invalid credentials', 'data' => null, 'status' => 401], 401);
         }
     }
 
@@ -206,6 +206,46 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil delete data user!',
+                'data' => $user,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ], 400);
+        }
+    }
+
+    public function validateUniqueUsername($username) {
+        try {
+            $user = User::where('username', $username)->first();
+
+            if($user) throw new \Exception('Username telah digunakan!');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Username tidak unique!',
+                'data' => $user,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ], 400);
+        }
+    }
+
+    public function validateUniqueEmail($email) {
+        try {
+            $user = User::where('email', $email)->first();
+
+            if($user) throw new \Exception('Email telah digunakan!');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Email tidak unique!',
                 'data' => $user,
             ], 200);
         } catch (\Exception $e) {

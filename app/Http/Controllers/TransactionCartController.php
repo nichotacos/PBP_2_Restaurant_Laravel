@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
+use App\Models\TransactionCart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class TransactionController extends Controller
+class TransactionCartController extends Controller
 {
 
     public function index()
     {
         try {
-            $transaction = Transaction::all();
+            $transaction = TransactionCart::all();
             return response()->json([
                 'status' => true,
-                'message' => 'Berhasil Ambil Data Transaksi!',
+                'message' => 'Berhasil Ambil Data Transaksi Cart!',
                 'data' => $transaction,
             ], 200);
         } catch (\Exception $e) {
@@ -30,8 +30,7 @@ class TransactionController extends Controller
     // public function index2($id)
     // {
     //     try {
-    //         $transaction = DB::table('transactions_cart')
-    //             ->join('')
+    //         $transaction = 
     //         return response()->json([
     //             'status' => true,
     //             'message' => 'Berhasil Ambil Data Transaksi!',
@@ -46,32 +45,11 @@ class TransactionController extends Controller
     //     }
     // }
 
-    public function update(Request $request, $id)
-    {
-        try {
-            $transaction = Transaction::find($id);
-            $data = $request->all();
-
-            $transaction->update($data);
-            
-            return response()->json([
-                'status' => true,
-                'message' => 'Berhasil Update Data Transaksi!',
-                'data' => $transaction,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-                'data' => [],
-            ], 400);
-        }
-    }
 
     public function store(Request $request)
     {
         try {
-            $transaction = Transaction::create($request->all());
+            $transaction = TransactionCart::create($request->all());
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil Insert Data Transaksi!',
@@ -89,7 +67,7 @@ class TransactionController extends Controller
     public function findLast() 
     {
         try {
-            $transaction = Transaction::all()->last();
+            $transaction = TransactionCart::all()->last();
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil Ambil Data Transaksi!',
@@ -104,22 +82,6 @@ class TransactionController extends Controller
         }
     }
 
-    public function findTransaction($id)
-    {
-        try {
-            $transaction = Transaction::all()->where('userId', '==', $id);
-            return response()->json([
-                'status' => true,
-                'message' => 'Berhasil Ambil Data Transaksi Cart!',
-                'data' => $transaction,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-                'data' => [],
-            ], 400);
-        }
-    }
+
 
 }

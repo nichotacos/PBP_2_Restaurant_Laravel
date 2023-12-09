@@ -33,6 +33,72 @@ class CartController extends Controller
         }
     }
 
+    public function index2($id)
+    {
+        try {
+            $cart = Cart::query()
+                ->join('items', 'carts.itemId', '=', 'items.id')
+                ->where('carts.userId', $id)
+                ->where('carts.status', 'On progress')
+                ->select('carts.*', 'items.name as item_name', 'items.imageData as item_image', 'items.price as item_price')
+                ->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil Ambil Data Cart!',
+                'data' => $cart,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ], 400);
+        }
+    }
+    
+
+    public function index3($id)
+    {
+        try {
+            $cart = Cart::query()
+                ->join('transactions_cart', 'carts.id', '='. 'transactions_cart.cartId')
+                ->join('items', 'carts.itemId', '=', 'items.id')
+                ->where('carts.userId', $id)
+                ->where('carts.status', 'On progress')
+                ->select('carts.*', 'items.name as item_name', 'items.imageData as item_image', 'items.price as item_price')
+                ->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil Ambil Data Cart!',
+                'data' => $cart,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ], 400);
+        }
+    }
+
+    public function getOnProgress($id)
+    {
+        try {
+            $cart = Cart::all()->where('status', '==', 'On progress')->where('userId', '==', $id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil Ambil Data Cart!',
+                'data' => $cart,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ], 400);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -120,28 +186,28 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, $id)
-    // {
-    //     try {
-    //         $cart = cart::find($id);
+    public function update(Request $request, $id)
+    {
+        try {
+            $cart = cart::find($id);
 
-    //         if (!$cart) throw new \Exception('Cart tidak ditemukan!');
+            if (!$cart) throw new \Exception('Cart tidak ditemukan!');
 
-    //         $cart->update($request->all());
+            $cart->update($request->all());
 
-    //         return response()->json([
-    //             'status' => true,
-    //             'message' => 'Berhasil update data Cart!',
-    //             'data' => $cart,
-    //         ], 200);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => $e->getMessage(),
-    //             'data' => [],
-    //         ], 400);
-    //     }
-    // }
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil update data Cart!',
+                'data' => $cart,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ], 400);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -158,6 +224,31 @@ class CartController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil delete data cart!',
+                'data' => $cart,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ], 400);
+        }
+    }
+
+    public function changeStatus($id)
+    {
+        try {
+            $cart = Cart::find($id);
+
+            if (!$cart) throw new \Exception('Cart tidak ditemukan!');
+
+            $done = 'Completed';
+
+            $cart->update(['status' => $done]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil update status cart!',
                 'data' => $cart,
             ], 200);
         } catch (\Exception $e) {

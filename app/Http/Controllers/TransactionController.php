@@ -53,7 +53,7 @@ class TransactionController extends Controller
             $data = $request->all();
 
             $transaction->update($data);
-            
+
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil Update Data Transaksi!',
@@ -107,7 +107,7 @@ class TransactionController extends Controller
     public function findTransaction($id)
     {
         try {
-            $transaction = Transaction::all()->where('userId', '==', $id);
+            $transaction = Transaction::where('userId', $id)->get();
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil Ambil Data Transaksi Cart!',

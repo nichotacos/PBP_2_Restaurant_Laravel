@@ -33,7 +33,6 @@ Route::get('cart/find/{id}', [CartController::class, 'find']);
 Route::put('cart/changeStatus/{id}', [CartController::class, 'changeStatus']);
 Route::apiResource('cart', CartController::class);
 
-
 Route::apiResource('items', ItemController::class);
 
 Route::get('transactions/findTransaction/{id}', [TransactionController::class, 'findTransaction']);

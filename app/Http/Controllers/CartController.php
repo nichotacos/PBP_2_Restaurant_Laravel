@@ -107,7 +107,6 @@ class CartController extends Controller
         try {
             $cart = Cart::create($request->all());
             return response()->json([
-                'status' => true,
                 'message' => 'Berhasil Insert Data Cart!',
                 'data' => $cart,
             ], 200);
@@ -169,8 +168,7 @@ class CartController extends Controller
             if (!$cart) throw new \Exception('Cart tidak ditemukan!');
 
             return response()->json([
-                'status' => true,
-                'message' => 'Berhasil ambil data cart!',
+                'message' => 'Berhasil update data Cart!',
                 'data' => $cart,
             ], 200);
         } catch (\Exception $e) {
@@ -222,7 +220,6 @@ class CartController extends Controller
             $cart->delete();
 
             return response()->json([
-                'status' => true,
                 'message' => 'Berhasil delete data cart!',
                 'data' => $cart,
             ], 200);

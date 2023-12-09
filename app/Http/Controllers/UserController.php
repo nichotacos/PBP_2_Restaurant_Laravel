@@ -216,44 +216,4 @@ class UserController extends Controller
             ], 400);
         }
     }
-
-    public function validateUniqueUsername($username) {
-        try {
-            $user = User::where('username', $username)->first();
-
-            if($user) throw new \Exception('Username telah digunakan!');
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Username tidak unique!',
-                'data' => $user,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-                'data' => [],
-            ], 400);
-        }
-    }
-
-    public function validateUniqueEmail($email) {
-        try {
-            $user = User::where('email', $email)->first();
-
-            if($user) throw new \Exception('Email telah digunakan!');
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Email tidak unique!',
-                'data' => $user,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-                'data' => [],
-            ], 400);
-        }
-    }
 }

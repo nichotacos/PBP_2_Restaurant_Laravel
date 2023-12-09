@@ -50,7 +50,7 @@ class FeedbackController extends Controller
                 ], 400);
             }
 
-            $request['status'] = "False";
+            $request['status'] = "Terkirim";
 
             $feedback = Feedback::create($request->all());
             return response()->json([
@@ -83,7 +83,7 @@ class FeedbackController extends Controller
             $feedback = Feedback::find($id);
 
             if (!$feedback) throw new \Exception('Feedback tidak ditemukan!');
-
+            $request['status'] = "Terkirim (Edited)";
             $feedback->update($request->all());
 
             return response()->json([
